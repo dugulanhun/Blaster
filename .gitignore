@@ -1,11 +1,18 @@
 # Directories
-.vscode
-.vs
 Binaries
 DerivedDataCache
 Intermediate
 Saved
 Build
+**/Geometry
+**/Mannequin
+**/ThirdPerson
+**/ThirdPersonBP
+**/LearningKit_Games
+**/MilitaryWeapSilver
+**/AnimStarterPack
+.vscode
+.vs
 
 #Files
 *.VC.db
