@@ -8,6 +8,7 @@
 #include "Components/WidgetComponent.h"
 #include "Net/UnrealNetwork.h"
 #include "Blaster/Weapon/Weapon.h"
+#include "Blaster/BlasterComponents/CombatComponent.h"
 
 // Sets default values
 ABlasterCharacter::ABlasterCharacter()
@@ -30,6 +31,9 @@ ABlasterCharacter::ABlasterCharacter()
 
 	OverheadWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("OverheadWidget"));
 	OverheadWidget->SetupAttachment(RootComponent);
+
+	Combat = CreateDefaultSubobject<UCombatComponent>(TEXT("CombatComponent"));
+	Combat->SetIsReplicated(true);
 }
 
 void ABlasterCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -37,6 +41,15 @@ void ABlasterCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME_CONDITION(ABlasterCharacter, OverlappingWeapon, COND_OwnerOnly);
+}
+
+void ABlasterCharacter::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+	if (Combat)
+	{
+		Combat->Character = this;
+	}
 }
 
 // Called when the game starts or when spawned
@@ -57,6 +70,9 @@ void ABlasterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 	PlayerInputComponent->BindAxis("MoveRight", this, &ABlasterCharacter::MoveRight);
 	PlayerInputComponent->BindAxis("Turn", this, &ABlasterCharacter::Turn);
 	PlayerInputComponent->BindAxis("LookUp", this, &ABlasterCharacter::LookUp);
+
+	PlayerInputComponent->BindAction("Equip", IE_Pressed, this, &ABlasterCharacter::EquipButtonPressed);
+
 }
 
 void ABlasterCharacter::MoveFoward(float Value)
@@ -89,6 +105,14 @@ void ABlasterCharacter::LookUp(float Value)
 	AddControllerPitchInput(Value);
 }
 
+void ABlasterCharacter::EquipButtonPressed()
+{
+	if (Combat && HasAuthority())
+	{
+		Combat->EquipWeapon(OverlappingWeapon);
+	}
+}
+
 void ABlasterCharacter::OnRep_OverlappingWeapon(AWeapon* LastWeapon)
 {
 	if (OverlappingWeapon)
@@ -108,6 +132,7 @@ void ABlasterCharacter::SetOverlappingWeapon(AWeapon* Weapon)
 		OverlappingWeapon->ShowPickupWidget(false);
 	}
 	OverlappingWeapon = Weapon;
+	// OnRep_OverlappingWeapon是在复制到客户端时才调用，在服务器端永远都调用不了，所以增加一个判断，用来显示服务器端的
 	if (IsLocallyControlled())
 	{
 		if (OverlappingWeapon)
