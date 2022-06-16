@@ -18,6 +18,11 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	void EquipWeapon(class AWeapon* WeaponToEquip);
+
+	void SetAiming(bool bIsAiming);
+
+	UFUNCTION(Server, Reliable)
+	void ServerSetAiming(bool bIsAiming);
 protected:
 	virtual void BeginPlay() override;
 
@@ -26,6 +31,9 @@ private:
 	
 	UPROPERTY(Replicated)
 	AWeapon* EquippedWeapon;
+
+	UPROPERTY(Replicated)
+	bool bAiming;
 
 public:	
 	
