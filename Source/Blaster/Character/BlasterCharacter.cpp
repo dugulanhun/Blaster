@@ -9,6 +9,8 @@
 #include "Net/UnrealNetwork.h"
 #include "Blaster/Weapon/Weapon.h"
 #include "Blaster/BlasterComponents/CombatComponent.h"
+#include "Components/CapsuleComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 ABlasterCharacter::ABlasterCharacter()
@@ -36,6 +38,9 @@ ABlasterCharacter::ABlasterCharacter()
 	Combat->SetIsReplicated(true);
 
 	GetMovementComponent()->NavAgentProps.bCanCrouch = true;
+
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_Camera, ECollisionResponse::ECR_Ignore);
+	GetMesh()->SetCollisionResponseToChannel(ECC_Camera, ECollisionResponse::ECR_Ignore);
 }
 
 void ABlasterCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -121,7 +126,12 @@ void ABlasterCharacter::EquipButtonPressed()
 		}
 		else
 		{
+			UE_LOG(LogTemp, Error, TEXT("ServerEquipButtonPressed_Implementation__Start"));
+
 			ServerEquipButtonPressed();
+
+			UE_LOG(LogTemp, Error, TEXT("ServerEquipButtonPressed_Implementation__End"));
+
 		}
 	}
 }
@@ -140,18 +150,52 @@ void ABlasterCharacter::CrouchButtonPressed()
 
 void ABlasterCharacter::AimButtonPressed()
 {
-	Combat->SetAiming(true);
+	if (Combat)
+	{
+		Combat->SetAiming(true);
+	}
 }
 
 void ABlasterCharacter::AimButtonReleased()
 {
-	Combat->SetAiming(false);
+	if (Combat)
+	{
+		Combat->SetAiming(false);
+	}
+}
+
+void ABlasterCharacter::AimOffset(float DeltaTime)
+{
+	if (Combat && Combat->EquippedWeapon == nullptr) return;
+
+	FVector Velocity = GetVelocity();
+	Velocity.Z = 0.f;
+	float Speed = Velocity.Size();
+	bool bIsInAir = GetCharacterMovement()->IsFalling();
+
+	if (Speed == 0.f && !bIsInAir)
+	{
+		FRotator CurrentAimRotation = FRotator(0.f, GetBaseAimRotation().Yaw, 0.f);
+		FRotator DeltaRotation = UKismetMathLibrary::NormalizedDeltaRotator(CurrentAimRotation, StartingAimRotation);
+		AO_Yaw = DeltaRotation.Yaw;
+		bUseControllerRotationYaw = false;
+	}
+	if (Speed > 0.f || bIsInAir)
+	{
+		StartingAimRotation = FRotator(0.f, GetBaseAimRotation().Yaw, 0.f);
+		AO_Yaw = 0.f;
+		bUseControllerRotationYaw = true;
+	}
+
+	AO_Pitch = GetBaseAimRotation().Pitch;
 }
 
 void ABlasterCharacter::ServerEquipButtonPressed_Implementation()
 {
 	if (Combat)
 	{
+		UE_LOG(LogTemp, Error, TEXT("ServerEquipButtonPressed_Implementation__On"));
+
 		Combat->EquipWeapon(OverlappingWeapon);
 	}
 }
@@ -199,6 +243,16 @@ bool ABlasterCharacter::IsAiming()
 void ABlasterCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	AimOffset(DeltaTime);
+
+	if (bUseControllerRotationYaw)
+	{
+		FString Name = GetFName().ToString();
+
+		UE_LOG(LogTemp, Error, TEXT("%s"), *Name);
+
+	}
 
 }
 

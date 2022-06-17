@@ -12,6 +12,10 @@ void UBlasterAnimInstance::NativeInitializeAnimation()
 	Super::NativeInitializeAnimation();
 
 	BlasterCharacter = Cast<ABlasterCharacter>(TryGetPawnOwner());
+
+	FString Name = BlasterCharacter->GetFName().ToString(); 
+	UE_LOG(LogTemp, Error, TEXT("%s"), *Name);
+
 }
 
 void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
@@ -47,4 +51,8 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 	const float Target = Delta.Yaw / DeltaTime;
 	const float Interp = FMath::FInterpTo(Lean, Target, DeltaTime, 6.f);
 	Lean = FMath::Clamp(Interp, -90.f, 90.f);
+
+	AO_Yaw = BlasterCharacter->GetAO_Yaw();
+	AO_Pitch = BlasterCharacter->GetAO_Pitch();
+
 }

@@ -19,6 +19,9 @@ public:
 
 	void EquipWeapon(class AWeapon* WeaponToEquip);
 
+protected:
+	virtual void BeginPlay() override;
+
 	void SetAiming(bool bIsAiming);
 
 	UFUNCTION(Server, Reliable)
@@ -26,9 +29,6 @@ public:
 
 	UFUNCTION()
 	void OnRep_EquippedWeapon();
-protected:
-	virtual void BeginPlay() override;
-
 private:
 	class ABlasterCharacter* Character;
 	
@@ -38,6 +38,11 @@ private:
 	UPROPERTY(Replicated)
 	bool bAiming;
 
+	UPROPERTY(EditAnywhere)
+	float BaseWalkSpeed;
+
+	UPROPERTY(EditAnywhere)
+	float AimWalkSpeed;
 public:	
 	
 
