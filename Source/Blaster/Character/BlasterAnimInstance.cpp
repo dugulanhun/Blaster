@@ -12,10 +12,6 @@ void UBlasterAnimInstance::NativeInitializeAnimation()
 	Super::NativeInitializeAnimation();
 
 	BlasterCharacter = Cast<ABlasterCharacter>(TryGetPawnOwner());
-
-	FString Name = BlasterCharacter->GetFName().ToString(); 
-	UE_LOG(LogTemp, Error, TEXT("%s"), *Name);
-
 }
 
 void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)

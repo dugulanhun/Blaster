@@ -36,7 +36,7 @@ void UCombatComponent::BeginPlay()
 
 }
 
-void UCombatComponent::EquipWeapon(class AWeapon* WeaponToEquip)
+void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 {
 	UE_LOG(LogTemp, Error, TEXT("EquipWeapon_Start"));
 
@@ -53,17 +53,6 @@ void UCombatComponent::EquipWeapon(class AWeapon* WeaponToEquip)
 	// 持枪之后，使用controller的旋转，不使用自己的旋转
 	Character->GetCharacterMovement()->bOrientRotationToMovement = false;
 	Character->bUseControllerRotationYaw = true;
-
-	FString Name = Character->GetFName().ToString();       // UKismetSystemLibrary::GetDisplayName(Character);
-
-	// GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Red, TEXT("%s"), *Name);
-	
-	if (Character->bUseControllerRotationYaw)
-	{
-		UE_LOG(LogTemp, Error, TEXT("%s"), *Name);
-
-	}
-
 }
 
 void UCombatComponent::SetAiming(bool bIsAiming)

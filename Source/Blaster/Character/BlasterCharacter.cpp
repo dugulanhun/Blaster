@@ -126,12 +126,7 @@ void ABlasterCharacter::EquipButtonPressed()
 		}
 		else
 		{
-			UE_LOG(LogTemp, Error, TEXT("ServerEquipButtonPressed_Implementation__Start"));
-
 			ServerEquipButtonPressed();
-
-			UE_LOG(LogTemp, Error, TEXT("ServerEquipButtonPressed_Implementation__End"));
-
 		}
 	}
 }
@@ -188,14 +183,19 @@ void ABlasterCharacter::AimOffset(float DeltaTime)
 	}
 
 	AO_Pitch = GetBaseAimRotation().Pitch;
+	if (AO_Pitch > 90.f && !IsLocallyControlled())
+	{
+		// map pitch from [270,360) to [-90,0)
+		FVector2D InRange(270.f, 360.f);
+		FVector2D OutRange(-90.f, 0.f);
+		AO_Pitch = FMath::GetMappedRangeValueClamped(InRange, OutRange, AO_Pitch);
+	}
 }
 
 void ABlasterCharacter::ServerEquipButtonPressed_Implementation()
 {
 	if (Combat)
 	{
-		UE_LOG(LogTemp, Error, TEXT("ServerEquipButtonPressed_Implementation__On"));
-
 		Combat->EquipWeapon(OverlappingWeapon);
 	}
 }
@@ -245,14 +245,6 @@ void ABlasterCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	AimOffset(DeltaTime);
-
-	if (bUseControllerRotationYaw)
-	{
-		FString Name = GetFName().ToString();
-
-		UE_LOG(LogTemp, Error, TEXT("%s"), *Name);
-
-	}
 
 }
 
