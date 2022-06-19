@@ -59,9 +59,11 @@ private:
 	void ServerEquipButtonPressed();
 
 	float AO_Yaw;
+	float InterAO_Yaw;
 	float AO_Pitch;
 	FRotator StartingAimRotation;
 
+	UPROPERTY(Replicated)
 	ETurningInPlace TurningInPlace;
 	void TurnInPlace(float DeltaTime);
 
