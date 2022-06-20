@@ -9,6 +9,8 @@ void AProjectileWeapon::Fire(const FVector& HitTarget)
 {
 	Super::Fire(HitTarget);
 
+	if (!HasAuthority()) return;
+
 	// 定义生成子弹的发起者为枪的持有者
 	APawn* InstigatorPawn = Cast<APawn>(GetOwner());
 	// 获取枪的MuzzleFlash插槽
