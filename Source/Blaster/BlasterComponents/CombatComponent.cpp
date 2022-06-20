@@ -7,10 +7,12 @@
 #include "GameFramework/CharacterMovementComponent.h"
 
 #include "Kismet/KismetSystemLibrary.h"
+#include "Kismet/GameplayStatics.h"
+#include "DrawDebugHelpers.h"
 
 UCombatComponent::UCombatComponent()
 {
-	PrimaryComponentTick.bCanEverTick = false;
+	PrimaryComponentTick.bCanEverTick = true;
 
 	BaseWalkSpeed = 600.f;
 	AimWalkSpeed = 350.f;
@@ -110,9 +112,68 @@ void UCombatComponent::MulticastFire_Implementation()
 	}
 }
 
+void UCombatComponent::TraceUnderCrosshairs(FHitResult& TraceHitResult)
+{
+	// 获取视口尺寸
+	FVector2D ViewportSize;
+	if (GEngine && GEngine->GameViewport)
+	{
+		GEngine->GameViewport->GetViewportSize(ViewportSize);
+	}
+
+	// 获取十字准心的位置和瞄准方向
+	FVector2D CrosshairLocation(ViewportSize.X / 2.f, ViewportSize.Y / 2.f);		// 视口坐标
+
+	FVector CrosshairworldPosition;			// 用来储存准心世界坐标
+	FVector CrosshairworldDirection;		// 用来储存瞄准方向世界坐标
+	// 视口坐标转世界坐标，返回是否转换成功的bool值
+	bool bScreenToWorld = UGameplayStatics::DeprojectScreenToWorld(
+		UGameplayStatics::GetPlayerController(this, 0),
+		CrosshairLocation,
+		CrosshairworldPosition,
+		CrosshairworldDirection
+	);
+
+	if (bScreenToWorld)
+	{
+		// 瞄准射线的起点和终点（未击中），终点为起点沿着瞄准方向一定距离
+		FVector Start = CrosshairworldPosition;
+		FVector End = Start + CrosshairworldDirection * TRACE_LENGTH;
+
+		// 射线追踪
+		GetWorld()->LineTraceSingleByChannel(
+			TraceHitResult,
+			Start,
+			End,
+			ECollisionChannel::ECC_PhysicsBody					// 记得调整碰撞通道
+		);
+
+		// 如果射线没击中,则将击中点设置为射线终点
+		if (!TraceHitResult.bBlockingHit)
+		{
+			TraceHitResult.ImpactPoint = End;
+		}
+		else
+		{
+			// 击中了，就绘制一个点来用来调试
+			DrawDebugSphere(
+				GetWorld(),
+				TraceHitResult.ImpactPoint,
+				12.f,
+				12,
+				FColor::Red
+			);
+		}
+	}
+}
+
+
 void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	FHitResult HitResult;
+	TraceUnderCrosshairs(HitResult);
 
 }
 

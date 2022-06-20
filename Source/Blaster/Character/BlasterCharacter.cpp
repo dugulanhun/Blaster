@@ -22,7 +22,9 @@ ABlasterCharacter::ABlasterCharacter()
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(GetMesh());
 	CameraBoom->SetRelativeLocation(FVector(0.0f, 0.0f, 88.0f));
-	CameraBoom->TargetArmLength = 600.f;
+	CameraBoom->TargetArmLength = 350.f;
+	CameraBoom->SocketOffset.Y = 75.f;
+	CameraBoom->SocketOffset.Z = 75.f;
 	CameraBoom->bUsePawnControlRotation = true;
 	
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
