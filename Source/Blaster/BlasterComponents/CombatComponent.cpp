@@ -156,17 +156,17 @@ void UCombatComponent::TraceUnderCrosshairs(FHitResult& TraceHitResult)
 		{
 			TraceHitResult.ImpactPoint = End;
 		}
-		else
-		{
-			// 击中了，就绘制一个点来用来调试
-			DrawDebugSphere(
-				GetWorld(),
-				TraceHitResult.ImpactPoint,
-				12.f,
-				12,
-				FColor::Red
-			);
-		}
+// 		else
+// 		{
+// 			// 击中了，就绘制一个点来用来调试
+// 			DrawDebugSphere(
+// 				GetWorld(),
+// 				TraceHitResult.ImpactPoint,
+// 				12.f,
+// 				12,
+// 				FColor::Red
+// 			);
+// 		}
 	}
 }
 
