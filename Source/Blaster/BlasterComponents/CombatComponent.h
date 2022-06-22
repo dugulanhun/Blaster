@@ -68,6 +68,8 @@ private:
 
 	float CrosshairVelocityFactor;
 	float CrosshairInAirFactor;
+	float CrosshairAimFactor;
+	float CrosshairShootingFactor;
 
 	// 用来调试目标射线的
 	FVector HitTarget;
