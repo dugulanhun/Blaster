@@ -47,6 +47,14 @@ void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 
 	SetHUDCorsshairs(DeltaTime);
 
+	// 用来调试目标射线的
+	if (Character && Character->IsLocallyControlled())
+	{
+		FHitResult HitResult;
+		TraceUnderCrosshairs(HitResult);
+		HitTarget = HitResult.ImpactPoint;
+	}
+
 }
 
 void UCombatComponent::SetHUDCorsshairs(float DeltaTime)
@@ -77,7 +85,7 @@ void UCombatComponent::SetHUDCorsshairs(float DeltaTime)
 				HUDPackage.CrosshairsTop = nullptr;
 			}
 
-			// calculate crosshair spread
+			// calculate crosshair spread，速度越大CrosshairVelocityFactor，跳起后CrosshairInAirFactor最大2.25倍，落地迅速变成0
 			
 			// [0,600]->[0,1]
 			float MaxSpeed;
@@ -114,8 +122,6 @@ void UCombatComponent::SetHUDCorsshairs(float DeltaTime)
 
 void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 {
-	UE_LOG(LogTemp, Error, TEXT("EquipWeapon_Start"));
-
 	if (Character == nullptr || WeaponToEquip == nullptr) return;
 
 	EquippedWeapon = WeaponToEquip;
@@ -230,8 +236,8 @@ void UCombatComponent::TraceUnderCrosshairs(FHitResult& TraceHitResult)
 		{
 			TraceHitResult.ImpactPoint = End;
 		}
-// 		else
-// 		{
+		else
+		{
 // 			// 击中了，就绘制一个点来用来调试
 // 			DrawDebugSphere(
 // 				GetWorld(),
@@ -240,7 +246,7 @@ void UCombatComponent::TraceUnderCrosshairs(FHitResult& TraceHitResult)
 // 				12,
 // 				FColor::Red
 // 			);
-// 		}
+		}
 	}
 }
 

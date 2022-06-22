@@ -228,11 +228,7 @@ void ABlasterCharacter::AimOffset(float DeltaTime)
 	}
 
 	AO_Pitch = GetBaseAimRotation().Pitch;
-	if (IsLocallyControlled())
-	{
-		UE_LOG(LogTemp, Error, TEXT("%f"), AO_Pitch);
-
-	}
+	
 	if (AO_Pitch > 90.f && !IsLocallyControlled())
 	{
 		// map pitch from [270,360) to [-90,0)
@@ -340,6 +336,12 @@ void ABlasterCharacter::Tick(float DeltaTime)
 
 	AimOffset(DeltaTime);
 
+}
+
+FVector ABlasterCharacter::GetHitTarget() const
+{
+	if (Combat == nullptr) return FVector();
+	return Combat->HitTarget;
 }
 
 
