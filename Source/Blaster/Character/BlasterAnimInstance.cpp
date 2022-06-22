@@ -66,18 +66,18 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 		LeftHandTransform.SetRotation(FQuat(OutRotation));
 
 		// 控制只有本地端才调整，节省带宽
-		if (BlasterCharacter->IsLocallyControlled())
+		//if (BlasterCharacter->IsLocallyControlled())
 		{
 			bLocallyControlled = true;
+
 			FTransform RightHandTransform = EquippedWeapon->GetWeaponMesh()->GetSocketTransform(FName("Hand_R"), ERelativeTransformSpace::RTS_World);
 			
-			UE_LOG(LogTemp, Error, TEXT("RightHandTransform:%f, %f, %F"), (RightHandTransform.GetLocation().X, RightHandTransform.GetLocation().Y, RightHandTransform.GetLocation().Z));
-
 			// 插槽Hand_R是朝内的，所以方向为插槽位置指向，插槽到目标点的方向
-			RightHandRotation = UKismetMathLibrary::FindLookAtRotation(RightHandTransform.GetLocation(), BlasterCharacter->GetHitTarget());
+			RightHandRotation = UKismetMathLibrary::FindLookAtRotation(RightHandTransform.GetLocation(), RightHandTransform.GetLocation()+ RightHandTransform.GetLocation()-BlasterCharacter->GetHitTarget());
 
-			UE_LOG(LogTemp, Error, TEXT("HitTarget:%f, %f, %F"), (BlasterCharacter->GetHitTarget().X, BlasterCharacter->GetHitTarget().Y, BlasterCharacter->GetHitTarget().Z));
-			UE_LOG(LogTemp, Error, TEXT("RightHandRotation:%f, %f, %F"), (RightHandRotation.Pitch, RightHandRotation.Yaw, RightHandRotation.Roll));
+			DrawDebugLine(GetWorld(), RightHandTransform.GetLocation(), BlasterCharacter->GetHitTarget(), FColor::Green);
+
+
 		}
 
 
