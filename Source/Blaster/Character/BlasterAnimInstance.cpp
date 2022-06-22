@@ -75,7 +75,7 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 			// 插槽Hand_R是朝内的，所以方向为插槽位置指向，插槽到目标点的方向
 			RightHandRotation = UKismetMathLibrary::FindLookAtRotation(RightHandTransform.GetLocation(), RightHandTransform.GetLocation()+ RightHandTransform.GetLocation()-BlasterCharacter->GetHitTarget());
 
-			DrawDebugLine(GetWorld(), RightHandTransform.GetLocation(), BlasterCharacter->GetHitTarget(), FColor::Green);
+// 			DrawDebugLine(GetWorld(), RightHandTransform.GetLocation(), BlasterCharacter->GetHitTarget(), FColor::Green);
 
 
 		}
@@ -84,13 +84,13 @@ void UBlasterAnimInstance::NativeUpdateAnimation(float DeltaTime)
 		/*
 		* 调试用来画射线的，查看枪口方向与目标方向的偏差
 		*/ 
-		FTransform MuzzleTipTransform = EquippedWeapon->GetWeaponMesh()->GetSocketTransform(FName("MuzzleFlash"), ERelativeTransformSpace::RTS_World);
+// 		FTransform MuzzleTipTransform = EquippedWeapon->GetWeaponMesh()->GetSocketTransform(FName("MuzzleFlash"), ERelativeTransformSpace::RTS_World);
 		// 获得X方向向量
-		FVector MuzzleX(FRotationMatrix(MuzzleTipTransform.GetRotation().Rotator()).GetUnitAxis(EAxis::X));
+// 		FVector MuzzleX(FRotationMatrix(MuzzleTipTransform.GetRotation().Rotator()).GetUnitAxis(EAxis::X));
 		// 枪口方向射线
-		DrawDebugLine(GetWorld(), MuzzleTipTransform.GetLocation(), MuzzleTipTransform.GetLocation() + MuzzleX * 1000.f, FColor::Red);
+// 		DrawDebugLine(GetWorld(), MuzzleTipTransform.GetLocation(), MuzzleTipTransform.GetLocation() + MuzzleX * 1000.f, FColor::Red);
 		// 枪口到目标射线
-		DrawDebugLine(GetWorld(), MuzzleTipTransform.GetLocation(), BlasterCharacter->GetHitTarget(), FColor::Orange);
+// 		DrawDebugLine(GetWorld(), MuzzleTipTransform.GetLocation(), BlasterCharacter->GetHitTarget(), FColor::Orange);
 	}
 
 }

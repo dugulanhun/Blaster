@@ -28,7 +28,7 @@ void ACasing::BeginPlay()
 	CasingMesh->AddImpulse(GetActorForwardVector() * ShellEjectionImpulse);
 
 	// 设置生命周期为10秒
-	SetLifeSpan(10);
+	SetLifeSpan(1.5);
 }
 
 void ACasing::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
