@@ -56,7 +56,6 @@ void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	// 用来调试目标射线的
 	if (Character && Character->IsLocallyControlled())
 	{
-		FHitResult HitResult;
 		TraceUnderCrosshairs(HitResult);
 		HitTarget = HitResult.ImpactPoint;	
 		
@@ -123,11 +122,19 @@ void UCombatComponent::SetHUDCorsshairs(float DeltaTime)
 			}
 			if (bAiming)
 			{
-				CrosshairAimFactor = FMath::FInterpTo(CrosshairAimFactor, 0.58f, DeltaTime, 30.f);
+				CrosshairAimFactor = FMath::FInterpTo(CrosshairAimFactor, 0.48f, DeltaTime, 30.f);
 			}
 			else
 			{
 				CrosshairAimFactor = FMath::FInterpTo(CrosshairAimFactor, 0.f, DeltaTime, 30.f);
+			}
+			if (HitResult.GetActor() && HitResult.GetActor()->Implements<UInteractWithCrosshairsInterface>())
+			{
+				CrosshairAimAtAnotherPlayerFactor = FMath::FInterpTo(CrosshairAimFactor, 0.2f, DeltaTime, 30.f);
+			}
+			else
+			{
+				CrosshairAimAtAnotherPlayerFactor = FMath::FInterpTo(CrosshairAimFactor, 0.f, DeltaTime, 30.f);
 			}
 
 			// 射击因子迅速归零
@@ -135,7 +142,7 @@ void UCombatComponent::SetHUDCorsshairs(float DeltaTime)
 			
 			
 			// 基准值，以免变得太小// 减号表示瞄准时准心变小
-			HUDPackage.CrosshairSpread = .5f + CrosshairVelocityFactor + CrosshairInAirFactor - CrosshairAimFactor + CrosshairShootingFactor;
+			HUDPackage.CrosshairSpread = .5f + CrosshairVelocityFactor + CrosshairInAirFactor - CrosshairAimFactor + CrosshairShootingFactor - CrosshairAimAtAnotherPlayerFactor;
 
 			HUD->SetHUDPackage(HUDPackage);
 		}
@@ -213,9 +220,6 @@ void UCombatComponent::FireButtonPressed(bool bPressed)
 	
 	if (bFireButtonPressed)
 	{
-		FHitResult HitResult;
-		TraceUnderCrosshairs(HitResult);
-
 		ServerFire(HitResult.ImpactPoint);
 
 		if (EquippedWeapon)

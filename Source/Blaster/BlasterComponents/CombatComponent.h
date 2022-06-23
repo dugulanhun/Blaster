@@ -71,10 +71,12 @@ private:
 	float CrosshairInAirFactor;
 	float CrosshairAimFactor;
 	float CrosshairShootingFactor;
+	float CrosshairAimAtAnotherPlayerFactor;
 
 	FHUDPackage HUDPackage;
 
 	// 用来调试目标射线的
+	FHitResult HitResult;
 	FVector HitTarget;
 
 	/**
