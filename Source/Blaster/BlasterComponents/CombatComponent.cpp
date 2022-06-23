@@ -266,6 +266,14 @@ void UCombatComponent::TraceUnderCrosshairs(FHitResult& TraceHitResult)
 	{
 		// 瞄准射线的起点和终点（未击中），终点为起点沿着瞄准方向一定距离
 		FVector Start = CrosshairworldPosition;
+
+		// 将起点移动到角色之前
+		if (Character)
+		{
+			float DistanceToCharacter = (Character->GetActorLocation() - Start).Size();
+			Start += CrosshairworldDirection * (DistanceToCharacter + 100.f);
+		}
+
 		FVector End = Start + CrosshairworldDirection * TRACE_LENGTH;
 
 		// 射线追踪

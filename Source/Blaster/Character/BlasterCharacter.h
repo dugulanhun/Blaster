@@ -76,6 +76,13 @@ private:
 	UPROPERTY(EditAnywhere, Category = Combat)
 	class UAnimMontage* FireWeaponMontage;
 
+	// 当摄像机与角色太近时，隐藏角色和武器，Tick函数
+	void HideCameraIfCharacterClose();
+
+	// 摄像机与角色的距离阈值
+	UPROPERTY(EditAnywhere)
+	float CameraThreshold = 200.f;
+
 public:	
 	void SetOverlappingWeapon(AWeapon* Weapon);
 	bool IsWeaponEquipped();
