@@ -17,6 +17,7 @@ public:
 	UTexture2D* CrosshairsTop;
 	UTexture2D* CrosshairsBottom;
 	float CrosshairSpread;				// 准心散布比率
+	FLinearColor CrosshairsColor;
 };
 
 /**
@@ -33,7 +34,7 @@ private:
 	// 由CombatComponent计算得到
 	FHUDPackage HUDPackage;
 
-	void DrawCrosshair(UTexture2D* Texture, FVector2D ViewportCenter, FVector2D Spread);
+	void DrawCrosshair(UTexture2D* Texture, FVector2D ViewportCenter, FVector2D Spread, FLinearColor CrosshairsColor);
 
 	// 准心散布最大距离
 	UPROPERTY(EditAnywhere)
