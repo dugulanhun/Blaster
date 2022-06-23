@@ -48,6 +48,33 @@ public:
 	UPROPERTY(EditAnywhere, Category = Crosshairs)
 		UTexture2D* CrosshairsBottom;
 
+
+	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
+		class UAnimationAsset* FireAnimation;
+
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<class ACasing> CasingClass;
+
+	/*
+	* Zoomed FOV while aiming
+	*/
+
+	UPROPERTY(EditAnywhere)
+		float ZoomedFOV = 30.f;
+
+	UPROPERTY(EditAnywhere)
+		float ZoomInterpSpeed = 20.f;
+
+	/*
+	* Automatic fire
+	*/
+	UPROPERTY(EditAnywhere, Category = Combat)
+		float FireDelay = .15f;
+
+	UPROPERTY(EditAnywhere, Category = Combat)
+		bool bAutomatic = true;
+
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -72,21 +99,6 @@ private:
 	UFUNCTION()
 	void OnRep_WeaponState();
 
-	UPROPERTY(EditAnywhere, Category = "Weapon Properties")
-	class UAnimationAsset* FireAnimation;
-
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<class ACasing> CasingClass;
-
-	/*
-	* Zoomed FOV while aiming
-	*/
-
-	UPROPERTY(EditAnywhere)
-	float ZoomedFOV = 30.f;
-
-	UPROPERTY(EditAnywhere)
-	float ZoomInterpSpeed = 20.f;
 public:	
 
 	void SetWeaponState(EWeaponState state);
