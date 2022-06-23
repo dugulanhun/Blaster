@@ -10,6 +10,7 @@
 #include "Sound/SoundCue.h"
 #include "Blaster/Character/BlasterCharacter.h"
 #include "Blaster/Blaster.h"
+#include "Blaster/Weapon/Weapon.h"
 
 AProjectile::AProjectile()
 {
@@ -61,6 +62,13 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
 	if (BlasterCharacter)
 	{
 		BlasterCharacter->MulticastHit();
+		
+// 		// 被击中后角色消失，可以设计动画
+// 		if (BlasterCharacter->GetEquippedWeapon())
+// 		{
+// 			BlasterCharacter->GetEquippedWeapon()->Destroy();
+// 		}
+// 		BlasterCharacter->Destroy();
 	}
 
 	ServerHit();
