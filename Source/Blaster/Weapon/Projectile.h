@@ -30,6 +30,9 @@ protected:
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastHit();
 
+	UPROPERTY(EditAnywhere)
+	float Damage = 20.f;
+
 
 private:
 
@@ -51,5 +54,5 @@ private:
 	class USoundCue* ImpactSound;
 
 public:	
-
+	FORCEINLINE UBoxComponent* GetCollisionBox() { return CollisionBox; }
 };

@@ -57,19 +57,6 @@ void AProjectile::BeginPlay()
 
 void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	// 判断击中的是否是角色，如果是，就广播击中动画
-	ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(OtherActor);
-	if (BlasterCharacter)
-	{
-		BlasterCharacter->MulticastHit();
-		
-// 		// 被击中后角色消失，可以设计动画
-// 		if (BlasterCharacter->GetEquippedWeapon())
-// 		{
-// 			BlasterCharacter->GetEquippedWeapon()->Destroy();
-// 		}
-// 		BlasterCharacter->Destroy();
-	}
 
 	ServerHit();
 	Destroy();
