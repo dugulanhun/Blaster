@@ -32,6 +32,7 @@ public:
 	UFUNCTION()
 	void ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, class AController* InstigatorController, AActor* DamageCauser);
 	void UpdateHUDHealth();
+	void Elim();
 protected:
 	virtual void BeginPlay() override;
 
