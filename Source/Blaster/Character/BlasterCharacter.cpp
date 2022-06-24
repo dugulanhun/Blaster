@@ -103,6 +103,16 @@ void ABlasterCharacter::PlayHitReactMontage()
 	}
 }
 
+void ABlasterCharacter::PlayElimMontage()
+{
+	UAnimInstance* AnimIsntance = GetMesh()->GetAnimInstance();
+	if (AnimIsntance && ElimMontage)
+	{
+		AnimIsntance->Montage_Play(ElimMontage);
+	}
+
+}
+
 // Called when the game starts or when spawned
 void ABlasterCharacter::BeginPlay()
 {
@@ -151,9 +161,10 @@ void ABlasterCharacter::UpdateHUDHealth()
 
 }
 
-void ABlasterCharacter::Elim()
+void ABlasterCharacter::Elim_Implementation()
 {
-
+	bElimmed = true;
+	PlayElimMontage();
 }
 
 // Called to bind functionality to input

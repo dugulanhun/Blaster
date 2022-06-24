@@ -26,12 +26,15 @@ public:
 
 	void PlayFireMontage(bool bAiming);
 	void PlayHitReactMontage();
+	void PlayElimMontage();
 
 	virtual void OnRep_ReplicatedMovement() override;
 
 	UFUNCTION()
 	void ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, class AController* InstigatorController, AActor* DamageCauser);
 	void UpdateHUDHealth();
+	
+	UFUNCTION(NetMulticast, Reliable)
 	void Elim();
 protected:
 	virtual void BeginPlay() override;
@@ -89,6 +92,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = Combat)
 	UAnimMontage* HitReactMontage;
 
+	UPROPERTY(EditAnywhere, Category = Combat)
+	UAnimMontage* ElimMontage;
+
 	// 当摄像机与角色太近时，隐藏角色和武器，Tick函数
 	void HideCameraIfCharacterClose();
 
@@ -121,6 +127,8 @@ private:
 
 	class ABlasterPlayerController* BlasterPlayerController;
 
+	bool bElimmed = false;
+
 public:	
 	void SetOverlappingWeapon(AWeapon* Weapon);
 	bool IsWeaponEquipped();
@@ -134,4 +142,5 @@ public:
 	FORCEINLINE UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 	FORCEINLINE bool ShouldRotateRootBone() const { return bRotateRootBone; }
+	FORCEINLINE bool IsElimmed() const { return bElimmed; }
 };
