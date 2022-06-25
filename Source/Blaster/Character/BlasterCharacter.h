@@ -34,8 +34,11 @@ public:
 	void ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, class AController* InstigatorController, AActor* DamageCauser);
 	void UpdateHUDHealth();
 	
-	UFUNCTION(NetMulticast, Reliable)
+	// 只在Server端执行
 	void Elim();
+	// 在所有端调用
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastElim();
 protected:
 	virtual void BeginPlay() override;
 
@@ -127,7 +130,17 @@ private:
 
 	class ABlasterPlayerController* BlasterPlayerController;
 
+	/*
+	* Elim 
+	*/
 	bool bElimmed = false;
+
+	FTimerHandle ElimTimer;
+
+	UPROPERTY(EditDefaultsOnly)
+	float ElimDelay = 3.f;
+
+	void ElimTimerFinished();
 
 public:	
 	void SetOverlappingWeapon(AWeapon* Weapon);
