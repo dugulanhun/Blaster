@@ -30,11 +30,12 @@ void ABlasterGameMode::RequestRespawn(ACharacter* ElimmedCharacter, AController*
 		int32 Selection = FMath::RandRange(0, PlayerStarts.Num() - 1);
 		RestartPlayerAtPlayerStart(ElimmedController, PlayerStarts[Selection]);
  		
-		ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(ElimmedController->GetCharacter());
-		if (BlasterCharacter)
-		{
-			BlasterCharacter->UpdateHUDHealth();
-		}
+		// 通过BlasterPlayerController的OnPossess函数解决了重生后Health条的更新问题
+// 		ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(ElimmedController->GetCharacter());
+// 		if (BlasterCharacter)
+// 		{
+// 			BlasterCharacter->UpdateHUDHealth();
+// 		}
 // 		APlayerController* PlayerController = Cast<APlayerController>(ElimmedController);
 // 		if (PlayerController)
 // 		{
