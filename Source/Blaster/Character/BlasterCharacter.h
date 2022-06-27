@@ -34,6 +34,8 @@ public:
 	UFUNCTION()
 	void ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, class AController* InstigatorController, AActor* DamageCauser);
 	void UpdateHUDHealth();
+	// Poll for any relelvant classes and initialize our HUD,bIsBlasterPlayerStateInit控制Tick轮询做完就不轮询了
+	void PollInit();
 	
 	// 只在Server端执行
 	void Elim();
@@ -180,6 +182,11 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	class USoundCue* ElimBotSound;
+
+	UPROPERTY()
+	class ABlasterPlayerState* BlasterPlayerState;
+
+	bool bIsBlasterPlayerStateInit = false;
 
 public:	
 	void SetOverlappingWeapon(AWeapon* Weapon);
