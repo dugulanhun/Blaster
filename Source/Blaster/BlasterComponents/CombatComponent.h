@@ -58,6 +58,7 @@ protected:
 	void ServerReload();
 
 	void HandleReload();			// 处理Reload的一些事件，多处会调用，所以提出来
+	int32 AmountToReload();			// 计算装弹量
 
 private:
 	class ABlasterCharacter* Character;
@@ -142,6 +143,8 @@ private:
 
 	UFUNCTION()
 	void OnRep_CombatState();
+
+	void UpdateAmmoValues();		// 封装更新装弹量函数
 
 public:	
 	

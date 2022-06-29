@@ -34,6 +34,8 @@ public:
 
 	void Dropped();
 
+	void AddAmmo(int32 AmmoToAdd);
+
 	/**
 	* Textures for the weapon crosshairs
 	*/
@@ -133,4 +135,6 @@ public:
 	FORCEINLINE float GetZoomInterpSpeed() const { return ZoomInterpSpeed; }
 	bool IsEmpty();					// ·µ»ØAmmoÊÇ·ñ¿Õ
 	FORCEINLINE EWeaponType GetWeaponType() const { return WeaponType; }
+	FORCEINLINE int32 GetAmmo() const { return Ammo; }
+	FORCEINLINE int32 GetMagCapacity() const { return MagCapacity; }
 };
