@@ -120,6 +120,11 @@ private:
 
 	TMap<EWeaponType, int32> CarriedAmmoMap;		// 用来储存不同类型武器子弹数，Map类型不能设置可复制的，因为哈希不确定
 
+	UPROPERTY(EditAnywhere)
+	int32 StartingARAmmo = 30;
+
+	void InitializeCarriedAmmo();
+
 public:	
 	
 
