@@ -22,20 +22,18 @@ public:
 	void SetHUDMatchCountdown(float CountdownTime);		// 设置HUD的
 	virtual void OnPossess(APawn* InPawn) override;
 	virtual void Tick(float DeltaTime) override;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	virtual float GetServerTime(); // Synced with server world clock
 	virtual void ReceivedPlayer() override; // Sync with server clock as soon as possible
+
+	void OnMatchStateSet(FName State);
 protected:
 	virtual void BeginPlay() override;
 
 	void SetHUDTime();			// 控制HUD更新频率方式
-private:
-	UPROPERTY()
-	class ABlasterHUD* BlasterHUD;
 
-	float MatchTime = 120.f;		// Temp
-	uint32 CountdownInt = 0;		// 计数，控制整数秒才更新HUD
-
+	void PollInit();
 	/**
 	* Sync time between client and server
 	*/
@@ -55,4 +53,27 @@ private:
 
 	float TimeSyncRunningTime = 0.f;		// 记录每次同步后运行的时间
 	void CheckTimeSync(float DeltaTime);	// 同步函数
+
+private:
+	UPROPERTY()
+	class ABlasterHUD* BlasterHUD;
+
+	float MatchTime = 120.f;		// Temp
+	uint32 CountdownInt = 0;		// 计数，控制整数秒才更新HUD
+
+	UPROPERTY(ReplicatedUsing = OnRep_MatchState)
+	FName MatchState;
+
+	UFUNCTION()
+	void OnRep_MatchState();
+
+	UPROPERTY()
+	class UCharacterOverlay* CharacterOverlay;
+	bool bInitializeCharacterOverlay = false;
+
+	float HUDHealth;
+	float HUDMaxHealth;
+	float HUDScore;
+	int32 HUDDefeats;
+
 };
