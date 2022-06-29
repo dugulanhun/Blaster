@@ -215,6 +215,12 @@ void UCombatComponent::EquipWeapon(AWeapon* WeaponToEquip)
 		);
 	}
 
+	// 自动装弹
+	if (EquippedWeapon->IsEmpty())
+	{
+		Reload();
+	}
+
 	// 持枪之后，使用controller的旋转，不使用自己的旋转
 	Character->GetCharacterMovement()->bOrientRotationToMovement = false;
 	Character->bUseControllerRotationYaw = true;
@@ -393,6 +399,11 @@ void UCombatComponent::FireTimerFinished()
 	if (bFireButtonPressed && EquippedWeapon->bAutomatic)
 	{
 		Fire();
+	}
+
+	if (EquippedWeapon->IsEmpty())
+	{
+		Reload();
 	}
 }
 
