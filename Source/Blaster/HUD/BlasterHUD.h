@@ -31,6 +31,9 @@ class BLASTER_API ABlasterHUD : public AHUD
 public:
 	virtual void DrawHUD() override;
 
+	/*
+	* CharacterOverlay 
+	*/
 	void AddCharacterOverlay();
 
 	UPROPERTY(EditAnywhere, Category = "Player Stats")
@@ -38,6 +41,18 @@ public:
 
 	UPROPERTY()
 	class UCharacterOverlay* CharacterOverlay;
+
+	/*
+	* Announcement
+	*/
+	void AddAnnouncement();
+
+	UPROPERTY(EditAnywhere, Category = "Announcements")
+	TSubclassOf<class UAnnouncement> AnnouncementClass;
+
+	UPROPERTY()
+	class UAnnouncement* Announcement;
+
 protected:
 	virtual void BeginPlay() override;
 
