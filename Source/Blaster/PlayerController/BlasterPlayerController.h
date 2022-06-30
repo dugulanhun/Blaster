@@ -64,14 +64,18 @@ protected:
 	void ServerCheckMatchState();
 
 	UFUNCTION(Client, Reliable)
-	void ClientJoinMidgame(FName StateOfMatch, float Warmup, float Match, float StartingTime);
+	void ClientJoinMidgame(FName StateOfMatch, float Warmup, float Match, float Cooldown, float StartingTime);
 
 private:
 	UPROPERTY()
 	class ABlasterHUD* BlasterHUD;
 
+	UPROPERTY()
+	class ABlasterGameMode* BlasterMode;
+
 	float MatchTime = 0.f;					// 从GameMode获取
 	float WarmupTime = 0.f;					// 从GameMode获取
+	float CooldownTime = 0.f;					// 从GameMode获取
 	float LevelStartingTime = 0.f;			// 从GameMode获取
 
 	uint32 CountdownInt = 0;		// 计数，控制整数秒才更新HUD

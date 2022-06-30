@@ -42,4 +42,7 @@ protected:
 
 private:
 	float CountdownTime = 0.f;		// 热身倒计时
+
+public:
+	FORCEINLINE float GetCountDownTime() { return CountdownTime; }
 };
