@@ -29,6 +29,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void FinishReloading();				// 由动画蓝图来调用，改变CombatState值，实现FABRIK的开关
 
+	void FireButtonPressed(bool bPressed);
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -39,8 +41,6 @@ protected:
 
 	UFUNCTION()
 	void OnRep_EquippedWeapon();
-
-	void FireButtonPressed(bool bPressed);
 
 	void Fire();
 

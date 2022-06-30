@@ -13,6 +13,8 @@
 #include "Blaster/PlayerState/BlasterPlayerState.h"
 #include "Blaster/HUD/Announcement.h"
 #include "Kismet/GameplayStatics.h"
+#include "Blaster/BlasterComponents/CombatComponent.h"
+#include "Blaster/Weapon/Weapon.h"
 
 void ABlasterPlayerController::BeginPlay()
 {
@@ -256,7 +258,7 @@ void ABlasterPlayerController::SetHUDTime()
 		BlasterMode = BlasterMode == nullptr ? Cast<ABlasterGameMode>(UGameplayStatics::GetGameMode(this)) : BlasterMode;
 		if (BlasterMode)
 		{
-			SecondsLeft = BlasterMode->GetCountDownTime();
+			SecondsLeft = FMath::CeilToInt(BlasterMode->GetCountDownTime() + LevelStartingTime);
 		}
 	}
 	if (CountdownInt != SecondsLeft)
@@ -362,5 +364,12 @@ void ABlasterPlayerController::HandleCooldown()
 		}
 	}
 
+	// Cooldown×´Ì¬ÏÂ£¬½ûÓÃÊäÈë¡¢Í£Ö¹Éä»÷
+	ABlasterCharacter* BlasterCharacter = Cast<ABlasterCharacter>(GetPawn());
+	if (BlasterCharacter && BlasterCharacter->GetCombat())
+	{
+		BlasterCharacter->bDisableGameplay = true;
+		BlasterCharacter->GetCombat()->FireButtonPressed(false);
+	}
 }
 
