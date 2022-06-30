@@ -23,6 +23,9 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	float WarmupTime = 10.f;		// 进入游戏前的热身时间长度
 
+	UPROPERTY(EditDefaultsOnly)
+	float MatchTime = 120.f;		// 游戏时间长度
+
 	float LevelStartingTime = 0.f;	// 记录关卡加载时间，并从热身时间中剔除
 
 protected:

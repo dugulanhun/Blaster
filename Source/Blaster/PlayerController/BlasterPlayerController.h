@@ -19,7 +19,8 @@ public:
 	void SetHUDDefeats(int32 Defeats);
 	void SetHUDWeaponAmmo(int32 Ammo);
 	void SetHUDCarriedAmmo(int32 Ammo);
-	void SetHUDMatchCountdown(float CountdownTime);		// 设置HUD的
+	void SetHUDMatchCountdown(float CountdownTime);			// 设置HUD的
+	void SetHUDAnnouncementCountdown(float CountdownTime);		// 设置HUD的
 	virtual void OnPossess(APawn* InPawn) override;
 	virtual void Tick(float DeltaTime) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
@@ -57,11 +58,21 @@ protected:
 	float TimeSyncRunningTime = 0.f;		// 记录每次同步后运行的时间
 	void CheckTimeSync(float DeltaTime);	// 同步函数
 
+	// Set time
+	UFUNCTION(Server, Reliable)
+	void ServerCheckMatchState();
+
+	UFUNCTION(Client, Reliable)
+	void ClientJoinMidgame(FName StateOfMatch, float Warmup, float Match, float StartingTime);
+
 private:
 	UPROPERTY()
 	class ABlasterHUD* BlasterHUD;
 
-	float MatchTime = 120.f;		// Temp
+	float MatchTime = 0.f;					// 从GameMode获取
+	float WarmupTime = 0.f;					// 从GameMode获取
+	float LevelStartingTime = 0.f;			// 从GameMode获取
+
 	uint32 CountdownInt = 0;		// 计数，控制整数秒才更新HUD
 
 	UPROPERTY(ReplicatedUsing = OnRep_MatchState)
