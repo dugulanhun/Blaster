@@ -14,6 +14,7 @@ AWeapon::AWeapon()
 	PrimaryActorTick.bCanEverTick = false;
 	// bReplicates开启表示可以在远程复制
 	bReplicates = true;
+	SetReplicateMovement(true);
 
 	WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("WeaponMesh"));
 	// WeaponMesh->SetupAttachment(RootComponent);
