@@ -238,6 +238,7 @@ void ABlasterCharacter::MulticastElim_Implementation()
 
 	// Disable character movement
 	bDisableGameplay = true;
+	GetCharacterMovement()->DisableMovement();			// 防止重力继续作用
 	if (Combat)
 	{
 		Combat->FireButtonPressed(false);
