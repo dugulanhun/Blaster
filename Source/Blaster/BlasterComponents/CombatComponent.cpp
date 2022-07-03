@@ -487,7 +487,7 @@ void UCombatComponent::TraceUnderCrosshairs(FHitResult& TraceHitResult)
 			TraceHitResult,
 			Start,
 			End,
-			ECollisionChannel::ECC_Visibility					// 记得调整碰撞通道
+			ECollisionChannel::ECC_PhysicsBody					// 记得调整碰撞通道
 		);
 
 		// 判断射线检测到的目标是否实现了UInteractWithCrosshairsInterface接口

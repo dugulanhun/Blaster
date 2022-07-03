@@ -19,13 +19,18 @@ public:
 protected:
 	FVector TraceEndWithScatter(const FVector& TraceStart, const FVector& HitTarget);		// 计算分散点
 
-private:
+	void WeaponTraceHit(const FVector& TraceStart, const FVector& HitTarget, FHitResult& OutHit);	   // 计算每个击中的目标
 
 	UPROPERTY(EditAnywhere)
 		float Damage = 20.f;
 
 	UPROPERTY(EditAnywhere)
 	class UParticleSystem* ImpactParticles;
+
+	UPROPERTY(EditAnywhere)
+	USoundCue* HitSound;
+
+private:
 
 	UPROPERTY(EditAnywhere)
 	UParticleSystem* BeamParticles;
@@ -35,9 +40,6 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	USoundCue* FireSound;
-
-	UPROPERTY(EditAnywhere)
-	USoundCue* HitSound;
 
 	/**
 	* Trace end with scatter
