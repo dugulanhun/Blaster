@@ -28,6 +28,11 @@ public:
 
 	void FireButtonPressed(bool bPressed);
 
+	UFUNCTION(BlueprintCallable)
+	void ShotgunShellReload();		// 蓝图中来调用，每个Shell通知调用一次，且只在Server端调用，Client通过Ammo的复制实现更新
+
+	void JumpToShotgunEnd();
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -160,6 +165,7 @@ private:
 	void OnRep_CombatState();
 
 	void UpdateAmmoValues();		// 封装更新装弹量函数
+	void UpdateShotgunAmmoValues();	// 每次装一颗子弹
 
 public:	
 	
