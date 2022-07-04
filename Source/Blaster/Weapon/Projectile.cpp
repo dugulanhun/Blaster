@@ -10,6 +10,8 @@
 #include "Blaster/Character/BlasterCharacter.h"
 #include "Blaster/Blaster.h"
 #include "Blaster/Weapon/Weapon.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
 
 AProjectile::AProjectile()
 {
@@ -52,29 +54,69 @@ void AProjectile::BeginPlay()
 	}
 }
 
-void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+void AProjectile::StartDestroyTimer()
 {
+	GetWorldTimerManager().SetTimer(
+		DestroyTimer,
+		this,
+		&AProjectile::DestroyTimerFinished,
+		DestroyTime
+	);
+}
 
-	ServerHit();
+void AProjectile::DestroyTimerFinished()
+{
 	Destroy();
 
 }
 
-void AProjectile::ServerHit_Implementation()
+void AProjectile::SpawnTrailSystem()
 {
-	MulticastHit();
+	if (TrailSystem)
+	{
+		TrailSystemComponent = UNiagaraFunctionLibrary::SpawnSystemAttached(
+			TrailSystem,
+			GetRootComponent(),
+			FName(),
+			GetActorLocation(),
+			GetActorRotation(),
+			EAttachLocation::KeepWorldPosition,
+			false
+		);
+	}
+
 }
 
-void AProjectile::MulticastHit_Implementation()
+void AProjectile::ExplodeDamage()
 {
-	if (ImpactParticles)
+	APawn* FiringPawn = GetInstigator();
+	if (FiringPawn && HasAuthority())		// 只在Server端产生伤害
 	{
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactParticles, GetActorTransform());
+		AController* FiringController = FiringPawn->GetController();
+		if (FiringController)
+		{
+			UGameplayStatics::ApplyRadialDamageWithFalloff(
+				this, // World context object
+				Damage, // BaseDamage
+				10.f, // MinimumDamage
+				GetActorLocation(), // Origin
+				DamageInnerRadius, // DamageInnerRadius
+				DamageOuterRadius, // DamageOuterRadius
+				1.f, // DamageFalloff
+				UDamageType::StaticClass(), // DamageTypeClass
+				TArray<AActor*>(), // IgnoreActors
+				this, // DamageCauser
+				FiringController // InstigatorController
+			);
+		}
 	}
-	if (ImpactSound)
-	{
-		UGameplayStatics::PlaySoundAtLocation(this, ImpactSound, GetActorLocation());
-	}
+
+}
+
+void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+
+	Destroy();
 
 }
 
@@ -88,5 +130,13 @@ void AProjectile::Destroyed()
 {
 	Super::Destroyed();
 
+	if (ImpactParticles)
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactParticles, GetActorTransform());
+	}
+	if (ImpactSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, ImpactSound, GetActorLocation());
+	}
 }
 

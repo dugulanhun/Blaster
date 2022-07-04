@@ -19,16 +19,14 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+	void StartDestroyTimer();
+	void DestroyTimerFinished();
+	void SpawnTrailSystem();
+	void ExplodeDamage();
 
 	// OnHit函数绑定Actor的Hit事件，参数可以看事件需求
 	UFUNCTION()
 	virtual void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
-
-	UFUNCTION(Server, Reliable)
-	void ServerHit();
-
-	UFUNCTION(NetMulticast, Reliable)
-	void MulticastHit();
 
 	UPROPERTY(EditAnywhere)
 	float Damage = 20.f;
@@ -42,8 +40,24 @@ protected:
 	UPROPERTY(EditAnywhere)
 	class UBoxComponent* CollisionBox;
 
+	UPROPERTY(EditAnywhere)
+	class UNiagaraSystem* TrailSystem;		// 粒子系统
+
+	UPROPERTY()
+	class UNiagaraComponent* TrailSystemComponent;
+
+
 	UPROPERTY(VisibleAnywhere)
 	class UProjectileMovementComponent* ProjectileMovementComponent;
+
+	UPROPERTY(VIsibleAnywhere)
+	class UStaticMeshComponent* ProjectileMesh;
+
+	UPROPERTY(EditAnywhere)
+	float DamageInnerRadius = 200.f;
+
+	UPROPERTY(EditAnywhere)
+	float DamageOuterRadius = 500.f;
 
 private:
 
@@ -51,6 +65,11 @@ private:
 	UParticleSystem* Tracer;
 
 	class UParticleSystemComponent* TracerComponent;
+
+	FTimerHandle DestroyTimer;
+
+	UPROPERTY(EditAnywhere)
+	float DestroyTime = 3.f;
 
 public:	
 	FORCEINLINE UBoxComponent* GetCollisionBox() { return CollisionBox; }
