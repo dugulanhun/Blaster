@@ -211,6 +211,13 @@ private:
 
 	bool bIsBlasterPlayerStateInit = false;
 
+	/**
+	* Grenade
+	*/
+
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* AttachedGrenade;
+
 public:	
 	void SetOverlappingWeapon(AWeapon* Weapon);
 	bool IsWeaponEquipped();
