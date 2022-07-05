@@ -33,6 +33,9 @@ public:
 
 	void JumpToShotgunEnd();
 
+	UFUNCTION(BlueprintCallable)
+	void ThrowGrenadeFinished();
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -61,6 +64,11 @@ protected:
 
 	void HandleReload();			// 处理Reload的一些事件，多处会调用，所以提出来
 	int32 AmountToReload();			// 计算装弹量
+
+	void ThrowGrenade();
+
+	UFUNCTION(Server, Reliable)
+	void ServerThrowGrenade();
 
 private:
 	class ABlasterCharacter* Character;

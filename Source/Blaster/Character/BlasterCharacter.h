@@ -30,6 +30,7 @@ public:
 	void PlayReloadMontage();
 	void PlayHitReactMontage();
 	void PlayElimMontage();
+	void PlayThrowGrenadeMontage();
 
 	virtual void OnRep_ReplicatedMovement() override;
 
@@ -72,6 +73,7 @@ protected:
 	void SimProxiesTurn();
 	void FireButtonPressed();
 	void FireButtonReleased();
+	void GrenadeButtonPressed();
 
 	void RotateInPlace(float DeltaTime);
 
@@ -120,6 +122,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = Combat)
 	UAnimMontage* ElimMontage;
+
+	UPROPERTY(EditAnywhere, Category = Combat)
+	UAnimMontage* ThrowGrenadeMontage;
 
 	// 当摄像机与角色太近时，隐藏角色和武器，Tick函数
 	void HideCameraIfCharacterClose();
