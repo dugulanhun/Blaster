@@ -36,6 +36,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ThrowGrenadeFinished();
 
+	UFUNCTION(BlueprintCallable)
+	void LaunchGrenade();			// 蓝图通知调用，最高点把手榴弹隐藏
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -76,6 +79,8 @@ protected:
 	void UpdateCarriedAmmo();
 	void PlayEquipWeaponSound();
 	void ReloadEmptyWeapon();
+
+	void ShowAttachedGrenade(bool bShowGrenade);
 
 private:
 	class ABlasterCharacter* Character;
