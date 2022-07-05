@@ -39,6 +39,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void LaunchGrenade();			// 蓝图通知调用，最高点把手榴弹隐藏
 
+	UFUNCTION(Server, Reliable)
+	void ServerLaunchGrenade(const FVector_NetQuantize& Target);
+
 protected:
 	virtual void BeginPlay() override;
 
