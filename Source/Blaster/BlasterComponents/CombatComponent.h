@@ -193,8 +193,19 @@ private:
 	void UpdateAmmoValues();		// 封装更新装弹量函数
 	void UpdateShotgunAmmoValues();	// 每次装一颗子弹
 
+	UPROPERTY(ReplicatedUsing = OnRep_Grenades)
+	int32 Grenades = 4;
+
+	UFUNCTION()
+	void OnRep_Grenades();
+
+	UPROPERTY(EditAnywhere)
+	int32 MaxGrenades = 4;
+
+	void UpdateHUDGrenades();
+
 public:	
-	
+	FORCEINLINE int32 GetGrenades() const { return Grenades; }
 
 		
 };
