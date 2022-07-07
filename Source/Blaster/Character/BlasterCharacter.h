@@ -37,6 +37,7 @@ public:
 	UFUNCTION()
 	void ReceiveDamage(AActor* DamagedActor, float Damage, const UDamageType* DamageType, class AController* InstigatorController, AActor* DamageCauser);
 	void UpdateHUDHealth();
+	void UpdateHUDShield();
 	// Poll for any relelvant classes and initialize our HUD,bIsBlasterPlayerStateInit控制Tick轮询做完就不轮询了
 	void PollInit();
 	
@@ -159,6 +160,21 @@ private:
 	UFUNCTION()
 	void OnRep_Health(float LastHealth);
 
+	/**
+	* Player shield
+	*/
+
+	UPROPERTY(EditAnywhere, Category = "Player Stats")
+	float MaxShield = 100.f;
+
+	UPROPERTY(ReplicatedUsing = OnRep_Shield, VisibleAnywhere, Category = "Player Stats")
+	float Shield = 100.f;
+
+	UFUNCTION()
+	void OnRep_Shield(float LastShield);
+
+
+	UPROPERTY()
 	class ABlasterPlayerController* BlasterPlayerController;
 
 	/*

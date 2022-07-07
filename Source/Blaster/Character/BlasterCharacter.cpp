@@ -80,6 +80,7 @@ void ABlasterCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME_CONDITION(ABlasterCharacter, OverlappingWeapon, COND_OwnerOnly);
 	DOREPLIFETIME(ABlasterCharacter, TurningInPlace);
 	DOREPLIFETIME(ABlasterCharacter, Health);
+	DOREPLIFETIME(ABlasterCharacter, Shield);
 	DOREPLIFETIME(ABlasterCharacter, bDisableGameplay);
 
 }
@@ -237,6 +238,15 @@ void ABlasterCharacter::UpdateHUDHealth()
 		BlasterPlayerController->SetHUDHealth(Health, MaxHealth);
 	}
 
+}
+
+void ABlasterCharacter::UpdateHUDShield()
+{
+	BlasterPlayerController = BlasterPlayerController == nullptr ? Cast<ABlasterPlayerController>(Controller) : BlasterPlayerController;
+	if (BlasterPlayerController)
+	{
+		BlasterPlayerController->SetHUDShield(Shield, MaxShield);
+	}
 }
 
 void ABlasterCharacter::PollInit()
@@ -473,6 +483,17 @@ void ABlasterCharacter::OnRep_Health(float LastHealth)
 		PlayHitReactMontage();
 	}
 }
+
+void ABlasterCharacter::OnRep_Shield(float LastShield)
+{
+	UpdateHUDShield();
+	if (Shield < LastShield)
+	{
+		PlayHitReactMontage();
+	}
+}
+
+
 
 void ABlasterCharacter::ElimTimerFinished()
 {
